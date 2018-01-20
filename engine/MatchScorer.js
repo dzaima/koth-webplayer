@@ -14,6 +14,7 @@ define(['math/statistics'], (statistics) => {
 					total: 0,
 					score: 0,
 					allScores: [],
+					rawFoodGotten: [],
 					certainty: null,
 					games: 0,
 					entries: team.entries.map((entry) => {
@@ -38,6 +39,7 @@ define(['math/statistics'], (statistics) => {
 					const teamItem = teamLookup.get(gameTeamScore.id);
 					teamItem.total += gameTeamScore.score;
 					teamItem.allScores.push(gameTeamScore.score);
+					teamItem.rawFoodGotten.push(gameTeamScore);
 					++ teamItem.games;
 					gameTeamScore.entries.forEach((gameEntryScore) => {
 						const entryItem = entryLookup.get(gameEntryScore.id);

@@ -240,6 +240,7 @@ define([
 		}
 
 		beginRandomTournament() {
+			progressReportGames = {};
 			this.beginTournament(
 				'T' + Random.makeRandomSeed(),
 				this.getManagedTeams()

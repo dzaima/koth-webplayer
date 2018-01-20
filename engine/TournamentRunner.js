@@ -49,8 +49,7 @@ define(() => {
 		constructor(structure) {
 			this.structure = structure;
 		}
-
-		begin(seed, teams, progressCallback = null) {
+		begin(seed, teams, progressCallback = (...a)=>{ProgressReport=a}) {
 			return begin(this.structure, progressCallback, null, {
 				seed,
 				teams,

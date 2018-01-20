@@ -77,7 +77,6 @@ define([
 			this.table = new HierarchyTable({className: 'match expanded'});
 			this.updateColumns(0);
 		}
-
 		sendData() {
 			this.table.setData(this.matchScores.teams.map((matchTeamScore) => {
 				const tableTeam = this.tableTeamsLookup.get(matchTeamScore.id);
@@ -133,6 +132,7 @@ define([
 			const game = new GameColumn(seed, name);
 			game.id = 'game' + this.games.length;
 			game.setScoresCallback((scores) => {
+				progressReportGames[game.id] = scores;
 				scores.teams.forEach((gameTeamScore) => {
 					this.tableTeamsLookup.get(gameTeamScore.id)[game.id] = {
 						value: gameTeamScore.score,

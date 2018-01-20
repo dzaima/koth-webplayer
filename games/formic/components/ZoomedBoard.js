@@ -55,6 +55,8 @@ define([
 			this.scaleY = 0;
 
 			this.canvas = docutil.make('canvas');
+			this.initializedOMD = false;
+			
 			this.canvas.width = 0;
 			this.canvas.height = 0;
 			this.board = docutil.make('div', {'class': 'zoomed-board'}, [this.canvas]);
@@ -116,8 +118,16 @@ define([
 				y = null;
 			}
 			if(this.x !== x || this.y !== y) {
-				this.x = x;
-				this.y = y;
+				if (changePos) {
+					this.x = x;
+					this.y = y;
+					if (!this.initializedOMD) {
+						this.initializedOMD = true;
+						document.querySelector(".game-board-clip canvas").onmousedown = function (e) {
+							changePos^=1;
+						}
+					}
+				}
 				this.repaint();
 				return true;
 			}

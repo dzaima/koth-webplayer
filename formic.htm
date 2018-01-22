@@ -1,7 +1,18 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-
+<meta http-equiv="content-security-policy" content="
+	base-uri 'self';
+	default-src 'none';
+	child-src blob:;
+	frame-src blob:;
+	connect-src https://api.stackexchange.com;
+	script-src 'self' 'unsafe-inline' blob:;
+	worker-src blob:;
+	style-src 'self';
+	img-src 'self';
+	form-action 'none';
+">
 <!-- these properties are read by the engine to configure the game -->
 <title>Formic Functions</title>
 <link rel="icon" href="favicons/formic.png">

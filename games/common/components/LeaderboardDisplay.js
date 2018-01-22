@@ -80,6 +80,10 @@ define([
 					title: 'Score',
 					attribute: 'score',
 					className: 'result',
+				}, {
+					title: 'show',
+					attribute: 'showHover',
+					className: 'showButton',
 				}],
 			});
 		}
@@ -148,6 +152,7 @@ define([
 			);
 
 			const teamScores = this.GameScorer.score(null, this.latestState).teams;
+			var temp;
 			this.table.setData(teamScores.map((teamScore) => Object.assign({
 				score: {
 					value: teamScore.score || '',
@@ -156,6 +161,10 @@ define([
 				nested: teamScore.entries.map((entryScore) =>
 					this.tableEntriesLookup.get(entryScore.id)
 				),
+				showHover: {value:docutil.make('input',
+				  (temp = {'onClick': `updateShowing('${teamScore.id}')`,
+					'type': 'checkbox'}, displayTeamList.includes('E' + teamScore.id.substring(1))? temp.checked=1 : '', temp)
+				)},
 			}, this.tableTeamsLookup.get(teamScore.id))));
 		}
 

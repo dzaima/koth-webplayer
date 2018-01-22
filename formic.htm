@@ -86,9 +86,14 @@ return {cell: 4};
 	var ProgressReport;
 	var progressReportGames = [];
   changePos = 1;
-	tempconsole = console.log;
-	defaultEnabled = true; //eval(prompt("load all entries?"));
 	var tempB;
+	var displayTeamList = ["E7"];
+	function updateShowing (id) {
+		id = "E" + id.substring(1);
+		if (displayTeamList.includes(id))
+		  displayTeamList.splice(displayTeamList.indexOf(id), 1)
+		else displayTeamList.push(id)
+	}
 </script>
 </head>
 <body>

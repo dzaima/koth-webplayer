@@ -44,6 +44,6 @@ define(['display/documentUtils'], (docutil) => {
 			'stack-exchange-question-url',
 			'https://' + site + '.stackexchange.com/questions/' + qid
 		),
-		githubLink: 'https://github.com/davidje13/koth-webplayer',
+		githubLink: 'https://github.com/dzaima/koth-webplayer',
 	};
 });

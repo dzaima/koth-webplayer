@@ -59,7 +59,8 @@ define([
 			
 			this.canvas.width = 0;
 			this.canvas.height = 0;
-			this.board = docutil.make('div', {'class': 'zoomed-board'}, [this.canvas]);
+			this.board = docutil.make('div', {}, [this.canvas]);
+			this.customClasses = new Map();
 			this.context = this.canvas.getContext('2d');
 			this.dat = null;
 			this.boardWidth = 0;
@@ -72,6 +73,29 @@ define([
 			this.setScale(scaleX, scaleY);
 			this.setFocus(x, y);
 			this.setSize(width, height);
+			this._updateClass();
+		}
+
+		_updateClass() {
+			const list = ['zoomed-board'];
+			this.customClasses.forEach((classes) => {
+				if(Array.isArray(classes)) {
+					list.push(...classes);
+				} else {
+					list.push(classes);
+				}
+			});
+
+			docutil.updateAttrs(this.board, {'class': list.join(' ')});
+		}
+
+		setClass(classes = null, id = '') {
+			if(classes) {
+				this.customClasses.set(id, classes);
+			} else {
+				this.customClasses.delete(id);
+			}
+			this._updateClass();
 		}
 
 		setColourChoices(colourChoices) {

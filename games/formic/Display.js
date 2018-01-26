@@ -392,7 +392,7 @@ define([
 						}
 					}
 					let className = '';
-					let displayMe = displayTeamList.includes(ant.entry);
+					let displayMe = displayTeamList.includes(ant.entry) || ant.entry[0] === "N";
 					if(ant.type === QUEEN) {
 						if(this.queenMarkerType && displayMe) {
 							className = 'queen-locator-' + this.queenMarkerType;

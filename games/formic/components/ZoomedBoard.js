@@ -61,7 +61,6 @@ define([
 			this.entries = new Map();
 
 			this.canvas = docutil.make('canvas');
-			this.initializedOMD = false;
 			
 			this.canvas.width = 0;
 			this.canvas.height = 0;
@@ -148,16 +147,8 @@ define([
 				y = null;
 			}
 			if(this.x !== x || this.y !== y) {
-				if (changePos) {
-					this.x = x;
-					this.y = y;
-					if (!this.initializedOMD) {
-						this.initializedOMD = true;
-						document.querySelector(".game-board-clip canvas").onmousedown = function (e) {
-							changePos^=1;
-						}
-					}
-				}
+				this.x = x;
+				this.y = y;
 				this.repaint();
 				return true;
 			}

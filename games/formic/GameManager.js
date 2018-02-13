@@ -352,7 +352,17 @@ define([
 				ant.y = p.y;
 				ant.i = p.i;
 			}
-			if(ant.type !== QUEEN) {
+			if(ant.type === QUEEN) {
+				for(let i = 0; i < 9; ++ i) {
+					const target = this.antGrid[this.offsetPos(ant, i).i];
+					if(
+						target && target.type === QUEEN &&
+						transferFood(ant, target)
+					) {
+						break;
+					}
+				}
+			} else {
 				for(let i = 0; i < 9; ++ i) {
 					const target = this.antGrid[this.offsetPos(ant, i).i];
 					if(

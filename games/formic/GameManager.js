@@ -193,7 +193,6 @@ define([
 			this.entryLookup = new Map();
 			this.ants = [];
 			this.nextAntID = 0;
-
 			const foodCount = Math.round(area * foodRatio);
 
 			let entryCount = 0;
@@ -209,7 +208,6 @@ define([
 					-- remaining;
 				}
 			}
-
 			// Take one position for each queen; the rest will be food
 			teams.forEach((team) => team.entries.forEach((entry) => {
 				const positionIndex = this.random.next(positions.length);

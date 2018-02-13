@@ -39,8 +39,11 @@ define(() => {
 
 	return class Random {
 		constructor(seed) {
+			this.stateArray = new Uint32Array(1)
 			this.s = new Uint32Array(8);
 			this.seed(seed);
+			
+			// this.stateArray[0] = +(seed.substring(1))
 		}
 
 		seed(seed) {
@@ -69,20 +72,28 @@ define(() => {
 				this.s[i] = this.s[i + 4];
 			}
 		}
-
+		
+		
 		next(range = 0x100000000) {
 			/* jshint -W016 */ // bit-operations are part of the algorithm
-			let x0 = this.s[0];
-			let x1 = this.s[1];
-			const y0 = this.s[2];
-			const y1 = this.s[3];
-			this.s[0] = y0;
-			this.s[1] = y1;
-			x0 ^= (x0 << 23) | (x1 >>> 9);
-			x1 ^= (x1 << 23);
-			this.s[2] = x0 ^ y0 ^ (x0 >>> 17) ^ (y0 >>> 26);
-			this.s[3] = x1 ^ y1 ^ (x0 << 15 | x1 >>> 17) ^ (y0 << 6 | y1 >>> 26);
-			return ((this.s[3] + y1) >>> 0) % range;
+			if (true) { // change this to false to enable trichoplax's seed system
+				let x0 = this.s[0];
+				let x1 = this.s[1];
+				const y0 = this.s[2];
+				const y1 = this.s[3];
+				this.s[0] = y0;
+				this.s[1] = y1;
+				x0 ^= (x0 << 23) | (x1 >>> 9);
+				x1 ^= (x1 << 23);
+				this.s[2] = x0 ^ y0 ^ (x0 >>> 17) ^ (y0 >>> 26);
+				this.s[3] = x1 ^ y1 ^ (x0 << 15 | x1 >>> 17) ^ (y0 << 6 | y1 >>> 26);
+				return ((this.s[3] + y1) >>> 0) % range;
+			} else {
+				this.stateArray[0] ^= this.stateArray[0] << 13
+				this.stateArray[0] ^= this.stateArray[0] >> 17
+				this.stateArray[0] ^= this.stateArray[0] << 5
+				return this.stateArray[0] % range
+			}
 		}
 
 		intGenerator(range = 0x100000000) {

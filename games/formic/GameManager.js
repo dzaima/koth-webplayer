@@ -357,7 +357,7 @@ define([
 					const target = this.antGrid[this.offsetPos(ant, i).i];
 					if(
 						target && target.type === QUEEN &&
-						transferFood(ant, target)
+						transferFood(target, ant)
 					) {
 						break;
 					}

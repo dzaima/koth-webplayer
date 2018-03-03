@@ -195,7 +195,7 @@ define([
 
 		skip() {
 			console.log(this);//return;
-			if (this.config.game.skipFrame < this.latestState.frame) {
+			if (this.config.game.skipFrame <= this.latestState.frame) {
 				this.latestState.frame = 0;
 				this.begin(this.getSeed(), this.config.game.teams);
 			}

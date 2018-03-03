@@ -85,7 +85,8 @@ return {cell: 4};
 <script src="core/require.js"></script>
 <script src="engine/entry.js" async></script>
 <script>
-  document.onkeypress = function (e) {
+  var shorcutFn = function (e) {
+		if (document.activeElement.tagName.toLowerCase() !== 'body') return;
     let k = e.key;
     if (/[ `0-9]/.test(k)) {
       let narr = ["Pause", "Play", "Play Fast", "Play Very Fast", "Play Crazy Fast", "Fastest Possible", "Play 1/8 Speed", "Play 1/4 Speed", "Play 1/2 Speed", "Step"]
@@ -95,6 +96,7 @@ return {cell: 4};
       document.querySelectorAll(`[title="${narr[k]}"]`)[0].click()
     }
   };
+	document.addEventListener("keydown", shorcutFn);
 	var ProgressReport;
 	var progressReportGames = [];
 	var tempB;

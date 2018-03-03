@@ -163,6 +163,7 @@ define([
 				throw new Error('Attempt to use terminated game');
 			}
 			Object.assign(this.config.play, delta);
+			Object.assign(this.config.play, {skipForwards: false});
 			if(this.display) {
 				this.display.updatePlayConfig(this.config.play);
 			}
@@ -203,7 +204,6 @@ define([
 				throw new Error('Attempt to use terminated game');
 			}
 			Object.assign(this.config.play, {delay: 0, speed: -1, skipForwards:true, skipFrame:this.config.game.skipFrame});
-			console.log(this.config.play);
 			if(this.display) {
 				this.display.updatePlayConfig(this.config.play);
 			}

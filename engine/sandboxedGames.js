@@ -108,7 +108,8 @@ define([
 			if(
 				this.playConfig.delay !== config.delay ||
 				this.playConfig.speed !== config.speed ||
-				this.playConfig.maxTime !== config.maxTime
+				this.playConfig.maxTime !== config.maxTime ||
+				this.playConfig.skipForwards !== skipForwards.maxTime
 			) {
 				this.playConfig = config;
 				if(!this.waiting) {
@@ -152,6 +153,7 @@ define([
 			break;
 
 		case 'UPDATE_PLAY_CONFIG':
+			game.stopSkip();
 			game.updatePlayConfig(data.playConfig);
 			break;
 

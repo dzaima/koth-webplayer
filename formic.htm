@@ -86,14 +86,16 @@ return {cell: 4};
 <script src="engine/entry.js" async></script>
 <script>
   var shorcutFn = function (e) {
-		if (document.activeElement.tagName.toLowerCase() !== 'body') return;
+		var active = document.activeElement.tagName.toLowerCase();
+		if (active === 'input' || active === 'textarea') return;
     let k = e.key;
-    if (/[ `0-9]/.test(k)) {
+    if (/[ `s0-9]/.test(k)) {
       let narr = ["Pause", "Play", "Play Fast", "Play Very Fast", "Play Crazy Fast", "Fastest Possible", "Play 1/8 Speed", "Play 1/4 Speed", "Play 1/2 Speed", "Step"]
       //             0        1         2               3                  4                 5                   6                 7                 8            9
       narr["`"] = "Step Frame";
       narr[" "] = "Pause";
-      document.querySelectorAll(`[title="${narr[k]}"]`)[0].click()
+      narr["s"] = "Skip to specified frame (potentially restarting the game if required)";
+      document.querySelector(`[title="${narr[k]}"]`).click()
     }
   };
 	document.addEventListener("keydown", shorcutFn);

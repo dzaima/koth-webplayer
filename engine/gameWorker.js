@@ -26,10 +26,10 @@ define(['math/Random'], (Random) => {
 			sendState();
 		}
 
-		function step({maxTime, steps, type}) {
+		function step({maxTime, steps, type, skip, skipFrame}) {
 			const limit = maxTime ? (Date.now() + maxTime) : 0;
 			try {
-				for(let i = 0; (steps < 0 || i < steps) && !game.isOver(); ++ i) {
+				for(let i = 0; (steps < 0 || i < steps) && !game.isOver() && (!skip || skipFrame>game.getState().frame); ++ i) {
 					game.step(type);
 					if(limit && Date.now() >= limit) {
 						break;

@@ -29,6 +29,7 @@ define([
 			this.beginGame = this.beginGame.bind(this);
 			this.replay = this.replay.bind(this);
 			this.step = this.step.bind(this);
+			this.skip = this.skip.bind(this);
 			this.updateGameConfig = this.updateGameConfig.bind(this);
 			this.updatePlayConfig = this.updatePlayConfig.bind(this);
 			this.updateDisplayConfig = this.updateDisplayConfig.bind(this);
@@ -54,6 +55,7 @@ define([
 			if(this.display) {
 				this.display.removeEventListener('begin', this.beginGame);
 				this.display.removeEventListener('replay', this.replay);
+				this.display.removeEventListener('skip', this.skip);
 				this.display.removeEventListener('step', this.step);
 				this.display.removeEventListener('changegame', this.updateGameConfig);
 				this.display.removeEventListener('changeplay', this.updatePlayConfig);
@@ -64,6 +66,7 @@ define([
 			if(this.display) {
 				this.display.addEventListener('begin', this.beginGame);
 				this.display.addEventListener('replay', this.replay);
+				this.display.addEventListener('skip', this.skip);
 				this.display.addEventListener('step', this.step);
 				this.display.addEventListener('changegame', this.updateGameConfig);
 				this.display.addEventListener('changeplay', this.updatePlayConfig);
@@ -93,6 +96,7 @@ define([
 			Object.assign(this.config.play, {
 				delay: 0,
 				speed: 0,
+				skipForwards: false,
 			});
 			if(this.display) {
 				this.display.updatePlayConfig(this.config.play);
@@ -109,6 +113,7 @@ define([
 						token: this.token,
 						type,
 						steps,
+						skip: false,
 					});
 				}, this.gameActive);
 			}
@@ -119,6 +124,7 @@ define([
 				throw new Error('Attempt to use terminated game');
 			}
 			Object.assign(this.config.game, delta);
+			Object.assign(this.config.game, {skipForwards: false});
 			if(this.display) {
 				this.display.updateGameConfig(this.config.game);
 			}
@@ -185,6 +191,29 @@ define([
 
 		replay() {
 			this.begin(this.getSeed(), this.config.game.teams);
+		}
+
+		skip() {
+			console.log(this);//return;
+			if (this.config.game.skipFrame < this.latestState.frame) {
+				this.latestState.frame = 0;
+				this.begin(this.getSeed(), this.config.game.teams);
+			}
+			if(this.dead) {
+				throw new Error('Attempt to use terminated game');
+			}
+			Object.assign(this.config.play, {delay: 0, speed: -1, skipForwards:true, skipFrame:this.config.game.skipFrame});
+			console.log(this.config.play);
+			if(this.display) {
+				this.display.updatePlayConfig(this.config.play);
+			}
+			if(this.gameStarted) {
+				this.parent.sandbox.postMessage({
+					action: 'UPDATE_PLAY_CONFIG',
+					token: this.token,
+					playConfig: this.config.play,
+				});
+			}
 		}
 
 		beginGame({seed = null} = {}) {

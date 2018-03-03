@@ -14,6 +14,7 @@ define([
 			this.timeout = null;
 
 			this._advance = this._advance.bind(this);
+			this.stopSkip = this.stopSkip.bind(this);
 			this._handleMessage = this._handleMessage.bind(this);
 
 			this.gameWorker = workerUtils.make([
@@ -75,6 +76,8 @@ define([
 				action: 'STEP',
 				type: type || '',
 				steps: steps || this.playConfig.speed,
+				skipFrame: this.playConfig.skipFrame,
+				skip: this.playConfig.skipForwards,
 				maxTime: (type !== null || steps !== null) ? 0 : this.playConfig.maxTime,
 			});
 		}
@@ -87,6 +90,10 @@ define([
 			if(!this.waiting) {
 				this._advance(type, steps);
 			}
+		}
+		
+		stopSkip() {
+			this.playConfig.skipForwards = false;
 		}
 
 		terminate() {
@@ -157,6 +164,7 @@ define([
 			break;
 
 		case 'STEP':
+			game.stopSkip();
 			game.step(data.type, data.steps);
 			break;
 

@@ -13,6 +13,12 @@ define([
 		event: 'replay',
 		params: [],
 	};
+	const SKIP_BUTTON = {
+		label: 'Skip to',
+		title: 'Skip to specified frame (potentially restarting the game if required)',
+		event: 'skip',
+		params: [],
+	};
 
 	const RANDOM_BUTTON = {
 		label: 'Random',
@@ -131,6 +137,11 @@ define([
 				'min': '1',
 				'step': '1',
 			});
+			this.skipFrame = docutil.make('input', {
+				'type': 'number',
+				'min': '0',
+				'step': '1',
+			});
 			this.seedEntry = docutil.make('input', {'type': 'text', 'class': 'seed-entry'});
 			this.seedGo = docutil.make('button', {}, ['Go']);
 
@@ -141,6 +152,11 @@ define([
 			this.maxFrame.addEventListener('change', () => {
 				const maxFrame = Math.max(Math.round(this.maxFrame.value), 1);
 				this.trigger('changegame', [{maxFrame}]);
+			});
+
+			this.skipFrame.addEventListener('change', () => {
+				const skipFrame = Math.max(Math.round(this.skipFrame.value), 1);
+				this.trigger('changegame', [{skipFrame}]);
 			});
 
 			this.seedGo.addEventListener('click', () => {
@@ -163,6 +179,8 @@ define([
 					docutil.make('span', {'class': 'frame'}, [this.frame]),
 					' of ',
 					this.maxFrame,
+						makeButton(SKIP_BUTTON, this).element,
+					this.skipFrame,
 				]),
 				docutil.make('span', {'class': 'play-speed'},
 					this.buttons.map((button) => button.element)
@@ -216,6 +234,11 @@ define([
 				docutil.updateAttrs(this.maxFrame, {'disabled': 'disabled'});
 			} else if(this.maxFrame !== docutil.document.activeElement) {
 				this.maxFrame.value = config.maxFrame;
+			}
+			if(config.skipFrame === undefined) {
+				docutil.updateAttrs(this.skipFrame, {'disabled': 'disabled'});
+			} else if(this.skipFrame !== docutil.document.activeElement) {
+				this.skipFrame.value = config.skipFrame;
 			}
 			if(config.seed !== this.currentSeed) {
 				this.currentSeed = config.seed;

@@ -153,7 +153,7 @@ define([
 			break;
 
 		case 'UPDATE_PLAY_CONFIG':
-			game.stopSkip();
+			//game.stopSkip();
 			game.updatePlayConfig(data.playConfig);
 			break;
 

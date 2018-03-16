@@ -195,7 +195,11 @@ define([
 			this.entryLookup = new Map();
 			this.ants = [];
 			this.nextAntID = 0;
-
+			
+			this.DZtoLog = [];
+			this.DZcounter = 0;
+			this.DZID = Math.random(1000);
+			this.DZviewLog = [123];
 			const foodCount = Math.round(area * foodRatio);
 
 			let entryCount = 0;
@@ -413,11 +417,27 @@ define([
 				entry.disqualified = true;
 			}
 		}
-
 		stepAnt(index) {
 			this.random.save();
 			const ant = this.ants[index];
 			const entry = this.entryLookup.get(ant.entry);
+			
+			this.DZviewLog.push([[-1,-1],[0,-1],[1,-1],[-1,0],[0,0],[1,0],[-1,1],[0,1],[1,1]].map(a=>{
+			  var x = a[0]+ant.x;
+			  var y = a[1]+ant.y;
+			  var pos = y*2500+x;
+			  return [this.board[pos], this.antGrid[pos]];
+			}));
+			this.DZviewLog.shift();
+			
+			this.DZtoLog.push(ant);
+			if (this.DZtoLog.length > 100) this.DZtoLog.shift();
+			if (this.DZcounter % 100000 == 0) console.log(this.DZID, this.DZtoLog, this.DZviewLog, this.board);
+			this.DZcounter++;
+			
+			
+			
+			
 			if(entry.disqualified) {
 				return;
 			}

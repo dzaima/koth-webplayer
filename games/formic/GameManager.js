@@ -41,9 +41,9 @@ define([
 	const SV_FRIEND = 0x80;
 	const SV_ANT_FOOD_SHIFT = 8;
 
-	const PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23];
+	const PRIMES = [1,43,71,107,347,941,1291,1571,2143,6521];
 
-	const CACHE_SIZE = 0x1234;
+	const CACHE_SIZE = 0x8000;
 
 	const SHARED_VIEW = []; // reusable array to reduce memory growth
 

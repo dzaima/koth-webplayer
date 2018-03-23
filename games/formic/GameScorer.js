@@ -38,6 +38,7 @@ define(() => {
 					id: team.id,
 					stepsDone: team.entries[0].stepsDone,
 					stepsCached: team.entries[0].stepsCached,
+					stepsOverwritten: team.entries[0].stepsOverwritten,
 					food,
 					workers: teamWorkers,
 					disqualified,

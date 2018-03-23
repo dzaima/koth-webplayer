@@ -113,6 +113,7 @@ define([
 	}
 
 	function putCache(entry, hash, view, action) {
+		if (entry.cacheView[hash] !== null) entry.stepsOverwritten++;
 		entry.cacheView[hash] = view;
 		entry.cacheAct[hash] = action;
 	}
@@ -238,6 +239,7 @@ define([
 					console: [],
 					stepsDone: 0,
 					stepsCached: 0,
+					stepsOverwritten: 0,
 					queen,
 					workerCounts: arrayUtils.makeList(WORKER_TYPES, 0),
 					cacheView: arrayUtils.makeList(CACHE_SIZE, null),
@@ -536,6 +538,7 @@ define([
 							error: entryState.error,
 							stepsDone: entryState.stepsDone,
 							stepsCached: entryState.stepsCached,
+							stepsOverwritten: entryState.stepsOverwritten,
 							errorInput: entryState.errorInput,
 							errorOutput: entryState.errorOutput,
 							console: entryState.console,

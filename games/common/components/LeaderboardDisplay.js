@@ -85,6 +85,10 @@ define([
 					attribute: 'cachePercent',
 					className: 'cachePClass',
 				}, {
+					title: 'collisions',
+					attribute: 'cacheOverwritten',
+					className: 'cacheOPClass',
+				}, {
 					title: 'show',
 					attribute: 'showHover',
 					className: 'showButton',
@@ -164,6 +168,10 @@ define([
 				},
 				cachePercent: {
 					value: Math.round(teamScore.stepsCached*10000/teamScore.stepsDone)/100 + "%",
+					className: '',
+				},
+				cacheOverwritten: {
+					value: teamScore.stepsOverwritten + "/" + teamScore.stepsDone,
 					className: '',
 				},
 				nested: teamScore.entries.map((entryScore) =>

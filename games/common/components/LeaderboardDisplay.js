@@ -81,6 +81,10 @@ define([
 					attribute: 'score',
 					className: 'result',
 				}, {
+					title: 'cached %',
+					attribute: 'cachePercent',
+					className: 'cachePClass',
+				}, {
 					title: 'show',
 					attribute: 'showHover',
 					className: 'showButton',
@@ -157,6 +161,10 @@ define([
 				score: {
 					value: teamScore.score || '',
 					className: (teamScore.winner ? 'win' : ''),
+				},
+				cachePercent: {
+					value: Math.round(teamScore.stepsCached*10000/teamScore.stepsDone)/100 + "%",
+					className: '',
 				},
 				nested: teamScore.entries.map((entryScore) =>
 					this.tableEntriesLookup.get(entryScore.id)

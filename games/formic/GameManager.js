@@ -106,6 +106,7 @@ define([
 	function findCache(entry, hash, view) {
 		const v = entry.cacheView[hash];
 		if(v && checkEqualView(v, view)) {
+			entry.stepsCached++;
 			return entry.cacheAct[hash];
 		}
 		return null;
@@ -235,6 +236,8 @@ define([
 					errorInput: null,
 					errorOutput: null,
 					console: [],
+					stepsDone: 0,
+					stepsCached: 0,
 					queen,
 					workerCounts: arrayUtils.makeList(WORKER_TYPES, 0),
 					cacheView: arrayUtils.makeList(CACHE_SIZE, null),
@@ -418,6 +421,7 @@ define([
 			this.random.save();
 			const ant = this.ants[index];
 			const entry = this.entryLookup.get(ant.entry);
+			entry.stepsDone++;
 			if(entry.disqualified) {
 				return;
 			}
@@ -530,6 +534,8 @@ define([
 							elapsedTime: entryState.elapsedTime,
 							disqualified: entryState.disqualified,
 							error: entryState.error,
+							stepsDone: entryState.stepsDone,
+							stepsCached: entryState.stepsCached,
 							errorInput: entryState.errorInput,
 							errorOutput: entryState.errorOutput,
 							console: entryState.console,

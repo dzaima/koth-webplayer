@@ -36,6 +36,8 @@ define(() => {
 				entries.sort(scoreSorter);
 				return {
 					id: team.id,
+					stepsDone: team.entries[0].stepsDone,
+					stepsCached: team.entries[0].stepsCached,
 					food,
 					workers: teamWorkers,
 					disqualified,

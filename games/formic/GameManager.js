@@ -43,7 +43,7 @@ define([
 
 	const PRIMES = [1,43,71,107,347,941,1291,1571,2143,6521];
 
-	const CACHE_SIZE = 0x8000;
+	const CACHE_SIZE = 0x42345;
 
 	const SHARED_VIEW = []; // reusable array to reduce memory growth
 

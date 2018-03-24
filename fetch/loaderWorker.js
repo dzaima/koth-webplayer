@@ -45,7 +45,7 @@ define(['./StackExchangeAPI'], (StackExchangeAPI) => {
 				link: item.link,
 				title,
 				codeBlocks,
-				enabled: false,
+				enabled: true,
 			};
 
 			self.postMessage({

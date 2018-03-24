@@ -98,21 +98,13 @@ define(() => {
 		}
 
 		makeRandomSeed() {
-			let s = '';
-			for(let i = 0; i < 4; ++ i) {
-				s += makeEncoded(this.next(0x100000000), CHARS_PER_INT);
-			}
-			return s;
+			return ""+this.next(0x100000000);
 		}
-
+		
 		static makeRandomSeed() {
-			const buffer = new Uint32Array(4);
+			const buffer = new Uint32Array(1);
 			crypto.getRandomValues(buffer);
-			let s = '';
-			for(let i = 0; i < 4; ++ i) {
-				s += makeEncoded(buffer[i], CHARS_PER_INT);
-			}
-			return s;
+			return buffer[0];
 		}
 	};
 });

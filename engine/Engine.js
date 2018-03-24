@@ -4,7 +4,7 @@ define([
 	'display/documentUtils',
 	'display/SplitView',
 	'display/MatchSummary',
-	'math/Random',
+	'math/RandomTrichoplax',
 	'./TournamentRunner',
 	'./GameOrchestrator',
 	'./EntryManager',
@@ -16,7 +16,7 @@ define([
 	docutil,
 	SplitView,
 	MatchSummary,
-	Random,
+	RandomTrichoplax,
 	TournamentRunner,
 	GameOrchestrator,
 	EntryManager,
@@ -242,7 +242,7 @@ define([
 		beginRandomTournament() {
 			progressReportGames = {};
 			this.beginTournament(
-				'T' + Random.makeRandomSeed(),
+				'T' + RandomTrichoplax.makeRandomSeed(),
 				this.getManagedTeams()
 			);
 		}
@@ -396,7 +396,7 @@ define([
 
 		beginRandomGame() {
 			this.beginGame(
-				'G' + Random.makeRandomSeed(),
+				'G' + RandomTrichoplax.makeRandomSeed(),
 				this.getManagedTeams()
 			);
 		}
@@ -413,7 +413,7 @@ define([
 			});
 			const beginNext = () => {
 				const gameProps = this.tournament.randomGame(
-					'T' + Random.makeRandomSeed(),
+					'T' + RandomTrichoplax.makeRandomSeed(),
 					this.getManagedTeams()
 				);
 				game.begin(gameProps.seed, gameProps.teams);

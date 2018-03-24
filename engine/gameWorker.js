@@ -1,4 +1,4 @@
-define(['math/Random'], (Random) => {
+define(['math/RandomTrichoplax'], (RandomTrichoplax) => {
 	'use strict';
 
 	return (GameManager) => {
@@ -22,7 +22,7 @@ define(['math/Random'], (Random) => {
 				throw new Error('Cannot re-use game worker');
 			}
 			time0 = Date.now();
-			game = new GameManager(new Random(config.seed), config);
+			game = new GameManager(new RandomTrichoplax(+config.seed.substring(1)), config);
 			sendState();
 		}
 

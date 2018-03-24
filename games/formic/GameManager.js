@@ -1,9 +1,11 @@
 define([
 	'core/arrayUtils',
 	'fetch/entryUtils',
+	'math/RandomTrichoplax',
 ], (
 	arrayUtils,
-	entryUtils
+	entryUtils,
+	RandomTrichoplax
 ) => {
 	'use strict';
 
@@ -204,32 +206,49 @@ define([
 			teams.forEach((team) => entryCount += team.entries.length);
 
 			// Randomly position all food & queens without overlaps
-			// (inefficient, but predictable performance regardless of coverage)
-			const positions = [];
-			let remaining = foodCount + entryCount;
-			for(let i = 0; i < area; ++ i) {
-				if(this.random.next(area - i) < remaining) {
-					positions.push(i);
-					-- remaining;
-				}
+			// const positions = [];
+			// let remaining = foodCount + entryCount;
+			// for(let i = 0; i < area; ++ i) {
+			// 	if(this.random.next(area - i) < remaining) {
+			// 		positions.push(i);
+			// 		-- remaining;
+			// 	}
+			// }
+			for (var i=0; i < foodCount; i++) {
+				setFoodAtI(this.board, i, true);
 			}
-
-			// Take one position for each queen; the rest will be food
-			teams.forEach((team) => team.entries.forEach((entry) => {
-				const positionIndex = this.random.next(positions.length);
-				const startIndex = positions.splice(positionIndex, 1)[0];
+			random.shuffle(this.board);
+			var selectedTeams = teams.slice();
+			selectedTeams.sort(function(a, b) {  // If players are not sorted, the random order will not be the same when using seeded random.
+				if (a.entries[0].answerID < b.entries[0].answerID) {
+					return 1
+				} else {
+					return -1
+				}
+			})
+			// console.log(selectedTeams.map(c=>c.entries[0].answerID))
+			random.shuffle(selectedTeams);
+			selectedTeams = selectedTeams.slice(0, 16);
+			selectedTeams.forEach((team) => team.entries.forEach((entry) => {
+				var x, y;
+				var playerRandom = new RandomTrichoplax(random.next(4294967296)); // Gives a seed from the full range of UInt32.
+				do {
+					x = random.next(width)
+					y = random.next(height)
+				}	while (this.antGrid[x + y*width] !== null || foodAtI[x + y*width]);
 
 				const queen = {
 					id: (this.nextAntID ++),
 					entry: entry.id,
 					type: QUEEN,
-					x: startIndex % this.width,
-					y: Math.floor(startIndex / this.width),
-					i: startIndex,
+					x: x,
+					y: y,
+					i: x + y*width,
 					food: 0,
 				};
 				this.entryLookup.set(entry.id, {
 					id: entry.id,
+					random: playerRandom,
 					fn: null,
 					pauseOnError: false,
 					disqualified: false,
@@ -247,18 +266,18 @@ define([
 					codeSteps: 0,
 					elapsedTime: 0,
 				});
-				this.ants.push(queen);
+				this.ants.unshift(queen);
 				this.antGrid[queen.i] = queen;
 				this.updateEntry(entry);
 			}));
 
 			// Ensure random competitor order
-			arrayUtils.shuffleInPlace(this.ants, this.random);
+			// arrayUtils.shuffleInPlace(this.ants, this.random);
 
 			// All remaining positions are food
-			for(let i = 0; i < positions.length; ++ i) {
-				setFoodAtI(this.board, positions[i], true);
-			}
+			// for(let i = 0; i < positions.length; ++ i) {
+			// 	setFoodAtI(this.board, positions[i], true);
+			// }
 		}
 
 		updateEntry({id, code = null, pauseOnError = null, disqualified = null}) {
@@ -331,7 +350,7 @@ define([
 			return {x, y, i: y * this.width + x};
 		}
 
-		moveAnt(index, ant, action, rotation) {
+		moveAnt(index, ant, action, rotation, entry) {
 			const p = this.offsetPos(ant, ROTATIONS[rotation][action.cell]);
 			if(action.color) {
 				setColourAtI(this.board, p.i, action.color);
@@ -360,18 +379,28 @@ define([
 				ant.y = p.y;
 				ant.i = p.i;
 			}
+			
+			var neighbours = [0,1,2,3,5,6,7,8]
 			if(ant.type === QUEEN) {
-				for(let i = 0; i < 9; ++ i) {
+				entry.random.shuffle(neighbours)
+				for(let i of neighbours) { // Check for enemy workers to lose food to.
+					if (!ant.food) {
+						break
+					}
 					const target = this.antGrid[this.offsetPos(ant, i).i];
-					if(
-						target && target.type !== QUEEN &&
+					if(target && target.type !== QUEEN && target.entry !== ant.entry) {
 						transferFood(target, ant)
-					) {
-						break;
+					}
+				}
+				for(let i of neighbours) { // Check for own workers to take food from.
+					const target = this.antGrid[this.offsetPos(ant, i).i];
+					if(target && target.type !== QUEEN && target.entry === ant.entry) {
+						transferFood(target, ant)
 					}
 				}
 			} else {
-				for(let i = 0; i < 9; ++ i) {
+				if (!ant.food) entry.random.shuffle(neighbours)
+				for(let i of neighbours) {
 					const target = this.antGrid[this.offsetPos(ant, i).i];
 					if(
 						target && target.type === QUEEN &&
@@ -411,7 +440,7 @@ define([
 				' for ' + entry.errorInput + ')'
 			);
 			if(entry.pauseOnError) {
-				this.random.rollback();
+				// this.random.rollback(); \\ ooohhh that's what these are about
 				this.currentAnt = index + 1;
 				throw 'PAUSE';
 			} else {
@@ -420,7 +449,7 @@ define([
 		}
 
 		stepAnt(index) {
-			this.random.save();
+			// this.random.save(); ?!?
 			const ant = this.ants[index];
 			const entry = this.entryLookup.get(ant.entry);
 			entry.stepsDone++;
@@ -429,7 +458,7 @@ define([
 			}
 
 			const view = SHARED_VIEW;
-			const rotation = this.random.next(4);
+			const rotation = entry.random.next(4);
 			const hash = this.generateView(view, ant, ant.entry, rotation);
 
 			let error = null;
@@ -437,7 +466,7 @@ define([
 			let action = findCache(entry, hash, view);
 
 			if(action) {
-				this.moveAnt(index, ant, action, rotation);
+				this.moveAnt(index, ant, action, rotation, entry);
 				return;
 			}
 
@@ -462,7 +491,7 @@ define([
 					viewCopy[i] = view[i];
 				}
 				putCache(entry, hash, viewCopy, action);
-				this.moveAnt(index, ant, action, rotation);
+				this.moveAnt(index, ant, action, rotation, entry);
 			}
 		}
 
@@ -523,7 +552,7 @@ define([
 				currentAnt: this.currentAnt,
 				simulationTime: this.simulationTime,
 				board: this.board,
-				teams: this.teams.map((team) => ({
+				teams: this.teams.filter(team=>team.entries.every(entry => this.entryLookup.get(entry.id))).map((team) => ({
 					id: team.id,
 					entries: team.entries.map((entry) => {
 						const entryState = this.entryLookup.get(entry.id);

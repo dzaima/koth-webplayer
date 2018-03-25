@@ -58,8 +58,12 @@ define([
 
 			if(includeThinkingTime) {
 				allColumns.push({
-					title: 'Thinking Time',
-					attribute: 'time',
+					title: "Food Left: ----",
+					className: "foodLeftCell",
+					nested: [{
+						title: 'Thinking Time',
+						attribute: 'time',
+					}]
 				});
 				this.flatColumns.push({
 					attribute: 'time',
@@ -189,6 +193,9 @@ define([
 
 		updateState(state) {
 			this.latestState = state;
+			try {
+				document.getElementsByClassName("foodLeftCell")[0].innerText = "Food Left: " + state.foodLeft
+			} catch (e) {}
 			this.rerenderData();
 		}
 

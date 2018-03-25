@@ -197,6 +197,7 @@ define([
 			this.nextAntID = 0;
 
 			const foodCount = Math.round(area * foodRatio);
+			this.foodLeft = foodCount;
 
 			let entryCount = 0;
 			teams.forEach((team) => entryCount += team.entries.length);
@@ -347,6 +348,7 @@ define([
 			} else if(action.cell !== CENTRE) {
 				if(foodAtI(this.board, p.i)) {
 					++ ant.food;
+					this.foodLeft--;
 					setFoodAtI(this.board, p.i, false);
 				}
 				this.antGrid[ant.i] = null;
@@ -516,6 +518,7 @@ define([
 				frame: this.frame,
 				currentAnt: this.currentAnt,
 				simulationTime: this.simulationTime,
+				foodLeft: this.foodLeft,
 				board: this.board,
 				teams: this.teams.map((team) => ({
 					id: team.id,

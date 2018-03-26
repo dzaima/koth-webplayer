@@ -1,5 +1,7 @@
 /* Full2DBoard, Full3DBoard */
-
+.TAR {
+	text-align:right;
+}
 .game-board, .game-board-3d {
 	position: relative;
 }

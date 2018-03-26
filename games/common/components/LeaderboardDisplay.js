@@ -58,8 +58,13 @@ define([
 
 			if(includeThinkingTime) {
 				allColumns.push({
-					title: 'Thinking Time',
-					attribute: 'time',
+					title: "Food Left:",
+					className: "TAR",
+					nested: [{
+						title: 'Thinking Time',
+						attribute: 'time',
+						className: "thinkingTime",
+					}]
 				});
 				this.flatColumns.push({
 					attribute: 'time',
@@ -77,9 +82,13 @@ define([
 					className: 'player',
 					attribute: 'name',
 				}, ...allColumns, {
-					title: 'Score',
-					attribute: 'score',
-					className: 'result',
+					title: "----",
+					className: "foodLeftCell",
+					nested: [{
+						title: 'Score',
+						attribute: 'score',
+						className: 'result',
+					}]
 				}, {
 					title: 'cached %',
 					attribute: 'cachePercent',
@@ -205,6 +214,9 @@ define([
 
 		updateState(state) {
 			this.latestState = state;
+			try {
+				document.getElementsByClassName("foodLeftCell")[0].innerText = state.foodLeft
+			} catch (e) {}
 			this.rerenderData();
 		}
 

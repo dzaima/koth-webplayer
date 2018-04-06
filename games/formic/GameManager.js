@@ -43,7 +43,7 @@ define([
 
 	const PRIMES = [1,43,71,107,347,941,1291,1571,2143,6521];
 
-	const CACHE_SIZE = 0x42345;
+	const CACHE_SIZE = 501077;
 
 	const SHARED_VIEW = []; // reusable array to reduce memory growth
 
@@ -366,10 +366,10 @@ define([
 				for(let i = 0; i < 9; ++ i) {
 					const target = this.antGrid[this.offsetPos(ant, i).i];
 					if(
-						target && target.type !== QUEEN &&
-						transferFood(target, ant)
+						target && target.type !== QUEEN
+						target.entry !== ant.entry
 					) {
-						break;
+						transferFood(target, ant);
 					}
 				}
 			} else {

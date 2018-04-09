@@ -115,7 +115,7 @@ define([
 	function putCache(entry, hash, view, action) {
 		if (entry.cacheView[hash] !== null) entry.stepsOverwritten++;
 		entry.cacheView[hash] = view;
-		entry.cacheAct[hash] = action;
+		entry.cacheAct[hash] = {cell:action.cell,color:action.color,type:action.type};
 	}
 
 	function checkIntRange(v, low, high) {

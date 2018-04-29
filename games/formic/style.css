@@ -43,6 +43,8 @@
 	content: '\2605';
 	position: relative;
 	font-size: 0.9em;
+	color: #c33;
+	font-family: "noto color emoji";
 	top: -1px;
 	color: #FF0000;
 }
@@ -57,6 +59,8 @@
 .game-board .mark.queen-locator-pointer:after {
 	content: '\01F451';
 	position: relative;
+	color: #c33;
+	font-family: "noto color emoji";
 	top: -4px;
 }
 
@@ -70,6 +74,8 @@
 .game-board .mark.worker-locator-pointer:after {
 	content: '\01F477';
 	position: relative;
+	color: #c33;
+	font-family: "noto color emoji";
 	top: -2px;
 }
 
@@ -83,6 +89,8 @@
 .game-board .mark.food-locator-pointer:after {
 	content: '\01F352';
 	position: relative;
+	color: #c33;
+	font-family: "noto color emoji";
 	top: -2px;
 }
 
@@ -136,18 +144,26 @@
 
 .zoomed-board .mark.queen-cell:before {
 	content: '\01F451';
+	color: #e45;
+	font-family: "noto color emoji";
 }
 
 .zoomed-board .mark.worker-cell:before {
 	content: '\01F477';
+	color: #e45;
+	font-family: "noto color emoji";
 }
 
 .zoomed-board .mark.laden-worker-cell:before {
 	content: '\01F3CB';
+	color: #e45;
+	font-family: "noto color emoji";
 }
 
 .zoomed-board .mark.food-cell:before {
 	content: '\01F352';
+	color: #c33;
+	font-family: "noto color emoji";
 }
 
 .zoomed-board .team:after {

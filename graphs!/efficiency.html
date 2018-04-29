@@ -1,0 +1,70 @@
+<head>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+</head>
+<canvas id="myChart" style="display: block; width: 680px; height: 340px;" width="680" height="340" class="chartjs-render-monitor"></canvas>
+<script>
+hl = (wc)=>30000*wc/(wc*2/2 + 1000/(2/(1+2)));
+slm = (wc, loopcount)=>30000*wc/(loopcount*1000/3 + 1000/(3/2) + (loopcount+1)*1000/3 + wc*4);
+SlPj = 1000/4 * 2
+slp = (wc, loopcount)=>30000*wc/(loopcount*SlPj + SlPj + (loopcount+1)*SlPj + wc*2);
+SlWF = (wc, lnC)=>30000*wc/((wc+lnC*40)*3/2 + 1000/(3/2.5) + (wc+lnC*40)*3/2);
+
+var ctx = document.getElementById("myChart").getContext('2d');
+var numbers = new Array(100).fill(0).map((c,i)=>i*10)
+window.onload = function() {
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: numbers,
+        datasets: [
+          ["slm","SlM start",0,0],["slm","SlM 1 loop",0,1],["slm","SlM 2 loops",0,2],
+          ["hl","Hyperwave",1],
+          ["slp", "SlP start",2,0],["slp", "SlP 1 loop",2,1],["slp", "SlP 2 loops",2,2],
+          ["SlWF", "WF+SlM start",3,0],["SlWF", "WF+SlM endgame",3,1],
+        ].map(c => {
+          fn = eval(c[0]);
+          let colors = [[255,0,0],[255,0,255],[0,255,0],[0,0,255]] [c[2]]
+          if (c[3]!==undefined) colors = colors.map(col=>Math.round(col*[1, .7, .4][c[3]]));
+          return {
+            label: c[1],
+            fill: false,
+				    borderColor: `rgba(${colors})`,
+            data: numbers.map(
+              n=>c[3]==undefined?
+                 fn(n)
+               : fn(n,c[3])
+            )};
+        }),
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Line Chart - Cubic interpolation mode'
+				},
+				tooltips: {
+					mode: 'index'
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Value'
+						},
+						ticks: {
+							suggestedMin: 500,
+							suggestedMax: 3000,
+						}
+					}]
+				}
+			}
+    }
+  });
+};
+</script>
